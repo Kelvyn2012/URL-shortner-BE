@@ -21,11 +21,14 @@ if env_origins:
     if env_origins == "*":
         origins = ["*"]
     else:
-        origins.extend(env_origins.split(","))
+        # Split by comma, strip whitespace, and remove empty strings to be robust against formatting
+        additional_origins = [origin.strip() for origin in env_origins.split(",") if origin.strip()]
+        origins.extend(additional_origins)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex="https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
